@@ -17,7 +17,7 @@ const limiter = RateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 20,
 });
-// Apply ratehelmethelmet limiter to all requests
+// Apply rate limiter to all requests
 app.use(limiter);
 
 // Add helmet to the middleware chain.
@@ -32,7 +32,7 @@ app.use(
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
