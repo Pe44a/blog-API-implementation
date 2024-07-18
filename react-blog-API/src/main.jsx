@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import BlogMainPage from './BlogMainPage.jsx'
+import Router from './routing'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BlogMainPage />
+    <Router />
   </React.StrictMode>,
 )
