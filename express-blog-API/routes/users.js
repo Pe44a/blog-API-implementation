@@ -17,7 +17,7 @@ router.delete('/post/:id',authenticateJWT.authMiddleware ,post_controller.post_d
 
 // Comment routes
 router.get('/posts/:postId/comments', comment_controller.post_comments_list);
-router.post('/comment/create',authenticateJWT.authMiddleware, comment_controller.comment_create);
+router.post('/comment/create', comment_controller.comment_create);
 router.put('/comment/:id',authenticateJWT.authMiddleware , comment_controller.comment_update);
 router.delete('/comment/:id',authenticateJWT.authMiddleware , comment_controller.comment_delete);
 

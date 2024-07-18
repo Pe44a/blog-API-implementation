@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
+import {Link, Outlet} from 'react-router-dom';
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);
@@ -18,17 +19,25 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <h1>Blog Posts</h1>
-      {posts.map(post => (
-        <div key={post._id} className="mb-6">
-          <h2>{post.title}</h2>
-          <p>{new Date(post.createdAt).toLocaleDateString()}</p>
-          <p>{post.content.substring(0, 200)}...</p>
-          <a href={`/post/${post._id}`}>Read more</a>
-        </div>
-      ))}
-    </div>
+      <div className='post-preview-container'>
+        {posts.map(post => {
+          const previewLink = `/post/${post._id}`;
+          return (
+            <div key={post._id} className='post-preview'>
+              <h2 className='post-preview-title'>{post.title}</h2>
+              <p className='post-preview-text'>{new Date(post.createdAt).toLocaleDateString()}</p>
+              <p className='post-preview-text'>{post.content.substring(0, 200)}...</p>
+              <div className="preview-link-container">
+                <Link className='post-preview-link' to={previewLink}>Read more</Link>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <Outlet />
+    </>
   );
 };
 
