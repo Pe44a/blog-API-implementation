@@ -13,9 +13,6 @@ const AdminPage = () => {
 
     useEffect(() => {
         checkAuth();
-    }, []);
-
-    useEffect(() => {
         fetchPosts();
     }, []);
 
@@ -50,11 +47,11 @@ const AdminPage = () => {
 
     const handleCreatePost = async () => {
         try {
-            await axios.post('http://localhost:3000/post/create', newPost, {
+            const response = await axios.post('http://localhost:3000/post/create', newPost, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             setNewPost({ title: '', content: '' });
-            fetchPosts();
+            setPosts((prevPosts) => [...prevPosts, response.data]); 
         } catch (error) {
             console.error('Error creating post:', error);
             setError('Failed to create post. Please try again.');
@@ -66,34 +63,53 @@ const AdminPage = () => {
             await axios.put(`http://localhost:3000/post/${id}`, editingPost, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
+    
+            // Update the 'posts' array directly after successful update
+            setPosts(prevPosts => prevPosts.map(post => 
+                post._id === id ? { ...post, ...editingPost } : post
+            ));
+    
             setEditingPost(null);
-            fetchPosts();
         } catch (error) {
             console.error('Error updating post:', error);
             setError('Failed to update post. Please try again.');
         }
     };
+    
 
     const handleDeletePost = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
-            try {
-                await axios.delete(`http://localhost:3000/post/${id}`, {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                });
-                fetchPosts();
-            } catch (error) {
-                console.error('Error deleting post:', error);
-                setError('Failed to delete post. Please try again.');
-            }
+          try {
+            await axios.delete(`http://localhost:3000/post/${id}`, {
+              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            });
+    
+            // Update posts state after deletion
+            setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id)); 
+          } catch (error) {
+            console.error('Error deleting post:', error);
+            setError('Failed to delete post. Please try again.');
+          }
         }
-    };
+      };
 
-    const handleDeleteComment = async (commentId) => {
+      const handleDeleteComment = async (commentId, postId) => { 
         try {
             await axios.delete(`http://localhost:3000/comment/${commentId}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
-            fetchPosts();
+
+            // Update the comments for the specific post 
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post._id === postId 
+                        ? { 
+                            ...post, 
+                            comments: post.comments.filter((c) => c._id !== commentId) 
+                        }
+                        : post
+                )
+            );
         } catch (error) {
             console.error('Error deleting comment:', error);
             setError('Failed to delete comment. Please try again.');
@@ -166,7 +182,7 @@ const AdminPage = () => {
                                     <div key={comment._id} className="comment-item">
                                         <p><strong>Username:</strong> {comment.username}</p>
                                         <p><strong>Comment:</strong> {comment.comment}</p>
-                                        <button className="admin-button" onClick={() => handleDeleteComment(post.comments)}>Delete Comment</button>
+                                        <button className="admin-button" onClick={() => handleDeleteComment(comment._id, post._id)}>Delete Comment</button>
                                     </div>
                                 ))}
                             </div>
