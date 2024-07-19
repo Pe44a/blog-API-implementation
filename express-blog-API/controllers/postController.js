@@ -22,7 +22,6 @@ exports.post_detail = asyncHandler(async (req, res, next) => {
 exports.post_create = [
   body("title", "Title must not be empty.").trim().isLength({ min: 1 }).escape(),
   body("content", "Content must not be empty.").trim().isLength({ min: 1 }).escape(),
-  body("published", "Published status must be specified.").isBoolean().toBoolean(),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -30,7 +29,6 @@ exports.post_create = [
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      published: req.body.published,
       // comments will be an empty array by default
       createdAt: new Date() // This will be set automatically if we don't provide it
     });

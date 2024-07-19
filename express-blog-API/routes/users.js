@@ -7,6 +7,8 @@ const authenticateJWT = require('./authenticateJWT')
 
 // Authentication routes
 router.post('/login', authenticateJWT.login);
+router.post('/admin', authenticateJWT.authMiddleware);
+
 
 // Post routes
 router.get('/', post_controller.post_list);

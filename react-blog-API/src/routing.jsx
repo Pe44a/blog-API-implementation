@@ -1,6 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./HomePage";
 import PostPage from "./PostPage";
+import LoginPage from "./LoginPage";
+import AdminPage from "./AdminPage"
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -11,6 +13,14 @@ const Router = () => {
     {
       path: "/post/:id",
       element: <PostPage />,
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/admin",
+      element: <AdminPage />,
     },
   ]);
 
