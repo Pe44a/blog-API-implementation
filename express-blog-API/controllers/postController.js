@@ -72,19 +72,17 @@ exports.post_update = [
 
 // Delete Post
 exports.post_delete = asyncHandler(async (req, res, next) => {
-  const [post, commentsInPost] = await Promise.all([
-    Post.findById(req.params.id).exec(),
-    Comment.find({ post: req.params.id }).exec(),
-  ]);
+  const post = await Post.findById(req.params.id).exec();
 
   if (!post) {
     return res.status(404).json({ message: "Post not found" });
   }
 
-  if (commentsInPost.length > 0) {
-    return res.status(400).json({ message: "Cannot delete post with existing comments" });
-  } else {
-    await Post.findByIdAndDelete(req.params.id);
-    res.json({deletedID: req.params.id});
-  }
+  // Delete all comments associated with the post
+  await Comment.deleteMany({ _id: { $in: post.comments } }).exec();
+
+  // Delete the post
+  await Post.findByIdAndDelete(req.params.id).exec();
+
+  res.json({ deletedID: req.params.id });
 });
