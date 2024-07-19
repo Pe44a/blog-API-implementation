@@ -5,7 +5,7 @@ const { body, validationResult } = require("express-validator");
 
 // Get all Posts
 exports.post_list = asyncHandler(async (req, res, next) => {
-  const allPosts = await Post.find().sort({ createdAt: -1 }).exec();
+  const allPosts = await Post.find().sort({ createdAt: -1 }).populate('comments').exec();
   res.json(allPosts);
 });
 

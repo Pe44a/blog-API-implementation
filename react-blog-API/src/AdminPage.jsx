@@ -164,8 +164,8 @@ const AdminPage = () => {
                                 <h4>Comments</h4>
                                 {post.comments.map(comment => (
                                     <div key={comment._id} className="comment-item">
-                                        <p><strong>{comment.username}:</strong> {comment.username}</p>
-                                        <p><strong>{comment.username}:</strong> {comment.content}</p>
+                                        <p><strong>Username:</strong> {comment.username}</p>
+                                        <p><strong>Comment:</strong> {comment.comment}</p>
                                         <button className="admin-button" onClick={() => handleDeleteComment(post.comments)}>Delete Comment</button>
                                     </div>
                                 ))}
