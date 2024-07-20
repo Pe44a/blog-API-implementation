@@ -12,22 +12,7 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
-// Set up rate limiter: maximum of twenty requests per minute
-const RateLimit = require("express-rate-limit");
-const limiter = RateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 20,
-});
 
-const corsOptions = {
-  origin: process.env.ORIGIN_URL,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-// Enable CORS
-app.use(cors(corsOptions));
-
-// Apply rate limiter to all requests
-// app.use(limiter);
 
 // Add helmet to the middleware chain.
 // Set CSP headers to allow our Bootstrap and Jquery to be served
@@ -39,13 +24,29 @@ app.use(
   }),
 );
 
+const corsOptions = {
+  origin: process.env.ORIGIN_URL,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+// Enable CORS
+app.use(cors(corsOptions));
+
+// Set up rate limiter: maximum of twenty requests per minute
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 20,
+});
+
+
+// Apply rate limiter to all requests
+// app.use(limiter);
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
 

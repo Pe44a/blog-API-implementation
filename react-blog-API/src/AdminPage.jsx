@@ -19,19 +19,19 @@ const AdminPage = () => {
     const checkAuth = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/login');
-            return;
+          navigate('/login');
+          return;
         }
-
+      
         try {
-            await axios.post('http://localhost:3000/admin', null, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+          await axios.post('http://localhost:3000/admin', null, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
         } catch (error) {
-            console.error('Authorization failed:', error);
-            navigate('/login');
+          console.error('Authorization failed:', error);
+          navigate('/login');
         }
-    };
+      };
 
     const fetchPosts = async () => {
         try {
@@ -50,8 +50,8 @@ const AdminPage = () => {
             const response = await axios.post('http://localhost:3000/post/create', newPost, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
-            setNewPost({ title: '', content: '' });
-            setPosts((prevPosts) => [...prevPosts, response.data]); 
+            fetchPosts();
+            setNewPost({username:'', content:''})
         } catch (error) {
             console.error('Error creating post:', error);
             setError('Failed to create post. Please try again.');
@@ -165,9 +165,9 @@ const AdminPage = () => {
                                 <button className="admin-button" onClick={() => setEditingPost(null)}>Cancel</button>
                             </>
                         ) : (
-                            <>
+                            <>  
                                 <h3>{post.title}</h3>
-                                <p>{post.content.substring(0, 100)}...</p>
+                                <p>{post.content? post.content.substring(0, 100):"please reload to view this post"}...</p>
                                 <button className="admin-button" onClick={() => setEditingPost(post)}>Edit</button>
                                 <button className="admin-button" onClick={() => handleDeletePost(post._id)}>Delete</button>
                                 <button className="admin-button" onClick={() => toggleComments(post._id)}>
@@ -175,6 +175,7 @@ const AdminPage = () => {
                                 </button>
                             </>
                         )}
+
                         {expandedPosts[post._id] && (
                             <div className="comments-section">
                                 <h4>Comments</h4>

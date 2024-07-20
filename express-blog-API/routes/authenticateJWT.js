@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+
 exports.login = async (req, res) => {
   try {
       const { username, password } = req.body;
@@ -47,7 +48,7 @@ exports.authMiddleware = (req, res, next) => {
           throw new Error('Not authorized');
       }
       req.user = 'admin';
-      res.json({message:"Authorization successfully"})
+      res.status(201).json({message:'authorized successfully'})
       next();
   } catch (err) {
       res.status(401).json({ message: 'Token is not valid' });
