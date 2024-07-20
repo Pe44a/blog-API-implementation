@@ -24,7 +24,7 @@ const AdminPage = () => {
         }
       
         try {
-          await axios.post('http://localhost:3000/admin', null, {
+          await axios.post(`${import.meta.env.VITE_BACK_END_URL}/admin`, null, {
             headers: { Authorization: `Bearer ${token}` }
           });
         } catch (error) {
@@ -35,7 +35,7 @@ const AdminPage = () => {
 
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/');
+            const response = await axios.get(`${import.meta.env.VITE_BACK_END_URL}/`);
             setPosts(response.data);
         } catch (error) {
             console.error('Error fetching posts:', error);
@@ -47,7 +47,7 @@ const AdminPage = () => {
 
     const handleCreatePost = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/post/create', newPost, {
+            const response = await axios.post(`${import.meta.env.VITE_BACK_END_URL}/post/create`, newPost, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             fetchPosts();
@@ -60,7 +60,7 @@ const AdminPage = () => {
 
     const handleUpdatePost = async (id) => {
         try {
-            await axios.put(`http://localhost:3000/post/${id}`, editingPost, {
+            await axios.put(`${import.meta.env.VITE_BACK_END_URL}/post/${id}`, editingPost, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
     
@@ -80,7 +80,7 @@ const AdminPage = () => {
     const handleDeletePost = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
           try {
-            await axios.delete(`http://localhost:3000/post/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_BACK_END_URL}/post/${id}`, {
               headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
     
@@ -95,7 +95,7 @@ const AdminPage = () => {
 
       const handleDeleteComment = async (commentId, postId) => { 
         try {
-            await axios.delete(`http://localhost:3000/comment/${commentId}`, {
+            await axios.delete(`${import.meta.env.VITE_BACK_END_URL}/comment/${commentId}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
 

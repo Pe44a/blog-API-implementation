@@ -12,8 +12,8 @@ const PostPage = () => {
     const fetchPostAndComments = async () => {
       try {
         const [postResponse, commentsResponse] = await Promise.all([
-          axios.get(`http://localhost:3000/post/${id}`),
-          axios.get(`http://localhost:3000/posts/${id}/comments`)
+          axios.get(`${import.meta.env.VITE_BACK_END_URL}/post/${id}`),
+          axios.get(`${import.meta.env.VITE_BACK_END_URL}/posts/${id}/comments`)
         ]);
         setPost(postResponse.data);
         setComments(commentsResponse.data);
@@ -28,7 +28,7 @@ const PostPage = () => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3000/comment/create`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACK_END_URL}/comment/create`, {
         username: newComment.username,
         comment: newComment.comment,
         postId: id

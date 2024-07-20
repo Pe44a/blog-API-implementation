@@ -8,7 +8,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/');
+        const response = await axios.get(`${import.meta.env.VITE_BACK_END_URL}/`);
         setPosts(response.data);
       } catch (error) {
         console.error('Error fetching posts:', error);
